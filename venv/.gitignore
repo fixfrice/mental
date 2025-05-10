@@ -1,0 +1,39 @@
+# Исключаем виртуальное окружение
+venv/
+env/
+ENV/
+.venv/
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Конфигурации IDE
+.vscode/
+.idea/
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.bak
+
+# Секретные/переменные окружения
+.env
+.env.*
+
+# Файлы операционной системы
+.DS_Store
+Thumbs.db
+
+# Библиотеки, установленные вручную
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Jupyter ноутбуки контрольные файлы
+.ipynb_checkpoints/
+
+# Сборка PyInstaller
+*.spec
