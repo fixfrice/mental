@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Mental Health Tracker{% endblock %}</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --color-primary: #6f42c1;
+            --color-bg: #f9fafb;
+            --color-light: #ffffff;
+            --color-muted: #6c757d;
+            --font-main: 'Manrope', sans-serif;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            font-family: var(--font-main);
+            color: #212529;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--color-light);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--color-primary);
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-nav .nav-link {
+            font-weight: 500;
+            margin-left: 20px;
+            color: #333;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--color-primary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--color-light);
+            border-top: 1px solid #e5e7eb;
+            padding: 30px 0;
+            margin-top: 60px;
+        }
+
+        footer p {
+            margin: 0;
+            color: var(--color-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 10px 24px;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a32a3;
+            border-color: #5a32a3;
+        }
+
+        .btn-outline-secondary {
+            border-color: #ced4da;
+            color: #495057;
+            border-radius: 8px;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #f1f3f5;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-weight: 700;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: #343a40;
+        }
+
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            background-color: transparent;
+            border-bottom: none;
+            font-weight: 600;
+        }
+
+        /* Main spacing */
+        main {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-nav {
+                text-align: center;
+            }
+
+            .navbar-nav .nav-link {
+                margin-left: 0;
+                padding: 10px 0;
+            }
+        }
+    </style>
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Mental Health Tracker</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/form">Survey</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/journal">Journal</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/progress">Progress</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p>&copy; 2025 Mental Health Tracker — All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

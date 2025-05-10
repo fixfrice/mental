@@ -1,0 +1,164 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="hero-section text-center text-white">
+    <div class="container py-5">
+        <h1 class="display-4 fw-bold">🧠 Mental Health Tracker</h1>
+        <p class="lead mt-3">Understand your emotions, reflect daily, and grow mentally stronger with our AI support.</p>
+        <a href="{{ url_for('form') }}" class="btn btn-light btn-lg mt-4">Start Assessment</a>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h2 class="section-title">🌿 What You Can Do</h2>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="feature-card text-center p-4">
+                <div class="icon mb-3">📝</div>
+                <h5 class="fw-bold">Daily Journal</h5>
+                <p>Write about your thoughts and feelings. AI will gently analyze your emotions.</p>
+                <a href="{{ url_for('journal') }}" class="btn btn-outline-primary mt-2">Open Journal</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="feature-card text-center p-4">
+                <div class="icon mb-3">📊</div>
+                <h5 class="fw-bold">Track Progress</h5>
+                <p>Visualize how your mental state improves over time through beautiful charts.</p>
+                <a href="{{ url_for('progress') }}" class="btn btn-outline-primary mt-2">View Progress</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="feature-card text-center p-4">
+                <div class="icon mb-3">🤖</div>
+                <h5 class="fw-bold">AI Lab</h5>
+                <p>Test your data across multiple AI models and get emotional health insights.</p>
+                <a href="{{ url_for('ai_lab') }}" class="btn btn-outline-primary mt-2">Try AI Lab</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="feature-card text-center p-4">
+                <div class="icon mb-3">📋</div>
+                <h5 class="fw-bold">Mood Survey</h5>
+                <p>Quickly assess your emotional balance by answering daily wellness questions.</p>
+                <a href="{{ url_for('form') }}" class="btn btn-outline-primary mt-2">Take Survey</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="steps-section bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">🔍 How It Works</h2>
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="step-box p-4">
+                    <div class="step-number">1</div>
+                    <h6 class="fw-bold mt-2">Reflect</h6>
+                    <p>Write your thoughts or complete a short survey about your emotional state.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-box p-4">
+                    <div class="step-number">2</div>
+                    <h6 class="fw-bold mt-2">Analyze</h6>
+                    <p>Let AI read between the lines and help you understand your current mood patterns.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-box p-4">
+                    <div class="step-number">3</div>
+                    <h6 class="fw-bold mt-2">Grow</h6>
+                    <p>Track your progress and receive personalized suggestions for mental wellness.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Hero section */
+.hero-section {
+    background: linear-gradient(to right, #74ebd5, #9face6);
+    padding: 80px 0;
+    border-radius: 0 0 40px 40px;
+}
+
+/* Title and subtitle */
+h1.display-4 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.lead {
+    font-size: 1.25rem;
+    font-weight: 400;
+}
+
+/* Features */
+.feature-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease-in-out;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-card .icon {
+    font-size: 2.2rem;
+}
+
+/* Buttons */
+.btn-outline-primary {
+    border-color: #4c6ef5;
+    color: #4c6ef5;
+    border-radius: 20px;
+}
+
+.btn-outline-primary:hover {
+    background-color: #4c6ef5;
+    color: white;
+}
+
+.btn-light {
+    border-radius: 30px;
+    font-weight: 600;
+}
+
+/* Steps section */
+.steps-section {
+    background-color: #f9fafb;
+}
+
+.step-box {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s;
+}
+
+.step-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.step-number {
+    width: 50px;
+    height: 50px;
+    background-color: #4c6ef5;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+{% endblock %}

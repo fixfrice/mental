@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="mb-4">Mental Health Survey</h1>
+            
+            <div class="card shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('form') }}">
+                        <div class="mb-4">
+                            <label class="form-label">1. How would you rate your overall feeling today?</label>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Very bad</span>
+                                <span class="text-muted">Very good</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                {% for i in range(11) %}
+                                <div class="form-check mx-1">
+                                    <input class="form-check-input" type="radio" name="feeling" id="feeling{{ i }}" value="{{ i }}" required {% if i == 5 %}checked{% endif %}>
+                                    <label class="form-check-label" for="feeling{{ i }}">{{ i }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">2. How would you rate your sleep quality last night?</label>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Very poor</span>
+                                <span class="text-muted">Excellent</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                {% for i in range(11) %}
+                                <div class="form-check mx-1">
+                                    <input class="form-check-input" type="radio" name="sleep" id="sleep{{ i }}" value="{{ i }}" required {% if i == 5 %}checked{% endif %}>
+                                    <label class="form-check-label" for="sleep{{ i }}">{{ i }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">3. How anxious do you feel right now?</label>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Not at all</span>
+                                <span class="text-muted">Extremely</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                {% for i in range(11) %}
+                                <div class="form-check mx-1">
+                                    <input class="form-check-input" type="radio" name="anxiety" id="anxiety{{ i }}" value="{{ i }}" required {% if i == 5 %}checked{% endif %}>
+                                    <label class="form-check-label" for="anxiety{{ i }}">{{ i }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">4. How would you rate your energy level today?</label>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Very low</span>
+                                <span class="text-muted">Very high</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                {% for i in range(11) %}
+                                <div class="form-check mx-1">
+                                    <input class="form-check-input" type="radio" name="energy" id="energy{{ i }}" value="{{ i }}" required {% if i == 5 %}checked{% endif %}>
+                                    <label class="form-check-label" for="energy{{ i }}">{{ i }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">5. How would you rate your stress level today?</label>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Not stressed</span>
+                                <span class="text-muted">Extremely stressed</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                {% for i in range(11) %}
+                                <div class="form-check mx-1">
+                                    <input class="form-check-input" type="radio" name="stress" id="stress{{ i }}" value="{{ i }}" required {% if i == 5 %}checked{% endif %}>
+                                    <label class="form-check-label" for="stress{{ i }}">{{ i }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="alert alert-info" role="alert">
+                <h5>Why is this important?</h5>
+                <p class="mb-0">Your answers help us evaluate your current mental state and provide personalized recommendations. Regular assessments allow us to track your progress over time.</p>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

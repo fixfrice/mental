@@ -1,0 +1,321 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-5 ai-title">AI Laboratory (12 AI Algorithms)</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <!-- Algorithm Selection -->
+        <h4 class="section-title">Select Algorithms to Use:</h4>
+        <div class="algo-buttons mb-4">
+            {% for algo in ["Linear Regression", "Logistic Regression", "Decision Tree", "Random Forest", "Naive Bayes", "KNN", "SVM", "Gradient Boosting", "KMeans", "Apriori", "PCA", "YOLO (CV)"] %}
+                <label class="algo-option">
+                    <input type="checkbox" name="selected_algos" value="{{ algo }}"> {{ algo }}
+                </label>
+            {% endfor %}
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons mb-5">
+            <button type="submit" name="action" value="analyze" class="btn btn-analyze">Analyze Selected</button>
+            <button type="submit" name="action" value="compare" class="btn btn-compare">Compare All Algorithms</button>
+        </div>
+
+        <!-- User Input -->
+        <h4 class="section-title">Enter your daily mental & physical state:</h4>
+        {% for label, name in [("Rate your feeling", "feeling"), ("Rate your sleep", "sleep"), ("Rate your anxiety", "anxiety"), ("Rate your energy", "energy"), ("Rate your stress", "stress")] %}
+        <div class="mb-4">
+            <label class="form-label">{{ label }}</label><br>
+            {% for i in range(6) %}
+                <label class="form-check-label me-3">
+                    <input type="radio" class="form-check-input" name="{{ name }}" value="{{ i }}" required> {{ i }}
+                </label>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <!-- Upload for YOLO -->
+        <div class="mb-4">
+            <label class="form-label">Upload Image for YOLO (optional)</label>
+            <input type="file" class="form-control" name="yolo_image">
+        </div>
+
+        <button type="submit" class="btn btn-final">Analyze</button>
+
+    </form>
+
+    {% if results %}
+    <hr>
+    <h2 class="mt-5 result-title">AI Results</h2>
+    <table class="table futuristic-table">
+        <thead>
+            <tr>
+                <th>Algorithm</th>
+                <th>Prediction</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for algo, result in results.items() %}
+            <tr>
+                <td>{{ algo }}</td>
+                <td>
+                    {% if "Very High" in result or "High" in result %}
+                        <span class="badge bg-danger">{{ result }}</span>
+                    {% elif "Medium" in result %}
+                        <span class="badge bg-warning text-dark">{{ result }}</span>
+                    {% elif "Low" in result or "Very Low" in result %}
+                        <span class="badge bg-success">{{ result }}</span>
+                    {% else %}
+                        {{ result }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Overall -->
+    <h3 class="mt-5 result-title">Overall Comparison</h3>
+    <canvas id="resultsChart" data-labels='{{ chart_labels | tojson | safe }}' data-data='{{ chart_data | tojson | safe }}'></canvas>
+
+    <h3 class="mt-5 result-title">Summary</h3>
+    <div class="summary-box">{{ summary }}</div>
+
+    <h3 class="mt-5 result-title">Visualization per Algorithm</h3>
+    {% for algo in results.keys() %}
+        <h5>{{ algo }}</h5>
+        <canvas class="algoChart" data-algo="{{ algo }}" data-value="{{ algo_chart_data[algo] }}"></canvas>
+        <hr>
+    {% endfor %}
+
+    {% if uploaded_image %}
+    <h3 class="mt-5 result-title">YOLO Detection</h3>
+    <img src="{{ uploaded_image }}" alt="YOLO Detection" class="img-fluid">
+    <p>{{ results['YOLO (CV)'] }}</p>
+    {% endif %}
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chartCanvas = document.getElementById('resultsChart');
+    if (chartCanvas) {
+        const ctx = chartCanvas.getContext('2d');
+        const chartLabels = JSON.parse(chartCanvas.getAttribute('data-labels'));
+        const chartData = JSON.parse(chartCanvas.getAttribute('data-data'));
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: 'Prediction Level',
+                    data: chartData,
+                    backgroundColor: chartData.map(value => value >= 3 ? 'rgba(255,99,132,0.7)' : value == 2 ? 'rgba(255,206,86,0.7)' : 'rgba(75,192,192,0.7)')
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true, max: 4 }
+                }
+            }
+        });
+    }
+
+    // Per Algorithm Charts
+    document.querySelectorAll('.algoChart').forEach(canvas => {
+        const ctx = canvas.getContext('2d');
+        const algo = canvas.dataset.algo;
+        const value = parseInt(canvas.dataset.value);
+
+        let type = 'bar', data = {}, options = { responsive: true };
+        if (algo.includes("Linear Regression")) type = 'line', data = { labels: ["1","2","3","4","5"], datasets: [{ label: algo, data: [1, 2, value, 3, 4], borderColor: 'blue', fill: false }]};
+        else if (algo.includes("Logistic Regression")) type = 'doughnut', data = { labels: ["No", "Yes"], datasets: [{ data: [5-value,value], backgroundColor:['gray','red']}]};
+        else if (algo.includes("Decision Tree")) type = 'bar', data = { labels: ["Level"], datasets: [{ label: algo, data: [value], backgroundColor: 'purple' }]};
+        else if (algo.includes("Random Forest")) type = 'bar', data = { labels: ["Tree 1", "Tree 2"], datasets: [{ label: algo, data: [value, value+1], backgroundColor: ['green', 'darkgreen'] }]};
+        else if (algo.includes("Naive Bayes")) type = 'pie', data = { labels: ["Low","Medium","High"], datasets: [{ data: [value, 5-value, 1], backgroundColor: ['lightblue','yellow','red']}]};
+        else if (algo.includes("KNN")) type = 'bubble', data = { datasets: [{ label: algo, data: [{x:value, y:value, r:10}], backgroundColor: 'orange' }]};
+        else if (algo.includes("SVM")) type = 'polarArea', data = { labels: ["Boundary","Decision"], datasets: [{ data: [value, 5-value], backgroundColor: ['red','lightgray']}]};
+        else if (algo.includes("Gradient Boosting")) type = 'bar', data = { labels: ["Boost"], datasets: [{ label: algo, data: [value], backgroundColor: 'orange' }]}, options.indexAxis = 'y';
+        else if (algo.includes("KMeans")) type = 'radar', data = { labels: ["Cluster 1","Cluster 2","Cluster 3"], datasets: [{ label: algo, data: [1,value,3], backgroundColor: 'rgba(54,162,235,0.2)', borderColor:'blue'}]};
+        else if (algo.includes("Apriori")) type = 'pie', data = { labels: ["Rule A","Rule B","Rule C"], datasets: [{ data: [value, 5-value, 1], backgroundColor: ['cyan','pink','yellow']}]};
+        else if (algo.includes("PCA")) type = 'line', data = { labels: ["PC1","PC2","PC3"], datasets: [{ label: algo, data: [1,value,3], borderColor: 'red', fill: false }]};
+
+        new Chart(ctx, { type: type, data: data, options: options });
+    });
+});
+</script>
+<style>
+    body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9fb;
+    color: #444;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+h1, h2, h3, h4, h5 {
+    color: #333;
+    text-align: center;
+    font-weight: 600;
+}
+
+.section-title {
+    color: #4e73df;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.algo-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.algo-option {
+    background: #ffffff;
+    color: #333;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.algo-option:hover {
+    background: #f0f4ff;
+    border-color: #4e73df;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.action-buttons button {
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-weight: 600;
+    border: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-analyze {
+    background-color: #4e73df;
+    color: #fff;
+}
+
+.btn-analyze:hover {
+    background-color: #3556c3;
+    transform: translateY(-2px);
+}
+
+.btn-compare {
+    background-color: #20c997;
+    color: #fff;
+}
+
+.btn-compare:hover {
+    background-color: #17a88a;
+    transform: translateY(-2px);
+}
+
+.btn-final {
+    display: block;
+    width: 100%;
+    background-color: #6f42c1;
+    color: white;
+    padding: 14px;
+    border-radius: 8px;
+    margin-top: 30px;
+}
+
+.btn-final:hover {
+    background-color: #5a36a6;
+}
+
+.futuristic-table {
+    background-color: #fff;
+    color: #555;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.futuristic-table th, .futuristic-table td {
+    padding: 14px;
+    text-align: center;
+}
+
+.futuristic-table thead {
+    background-color: #f4f7fb;
+    color: #4e73df;
+}
+
+.futuristic-table tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.summary-box {
+    padding: 18px;
+    background: #eef3fb;
+    border-radius: 8px;
+    color: #2b6cb0;
+    text-align: center;
+    font-size: 18px;
+}
+
+.algoChart {
+    max-width: 400px;
+    margin: 30px auto;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.img-fluid {
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    padding: 3px;
+    background-color: #fff;
+}
+
+.form-check-input[type="radio"] {
+    appearance: none;
+    border: 2px solid #999;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    position: relative;
+    cursor: pointer;
+}
+
+.form-check-input[type="radio"]:checked {
+    background-color: #4e73df;
+    border-color: #4e73df;
+}
+
+.form-check-label {
+    color: #555;
+    margin-right: 20px;
+    font-weight: 500;
+}
+
+.upload-section {
+    margin-top: 30px;
+}
+
+</style>
+{% endblock %}

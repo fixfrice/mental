@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="mb-4">Journal Entry</h1>
+            
+            <div class="card shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('journal') }}">
+                        <div class="mb-4">
+                            <label for="content" class="form-label">How are you feeling today?</label>
+                            <textarea class="form-control" id="content" name="content" rows="10" placeholder="Express your thoughts and feelings freely here. Write about your day, any concerns, or positive experiences..." required></textarea>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-primary">Submit Entry</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Journaling Tips</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>What to Write About:</h6>
+                            <ul class="mb-0">
+                                <li>Your feelings and emotions</li>
+                                <li>Challenges you faced today</li>
+                                <li>Positive moments or achievements</li>
+                                <li>Things you're grateful for</li>
+                                <li>Goals and aspirations</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Benefits of Journaling:</h6>
+                            <ul class="mb-0">
+                                <li>Reduces stress and anxiety</li>
+                                <li>Increases self-awareness</li>
+                                <li>Helps process emotions</li>
+                                <li>Improves problem-solving</li>
+                                <li>Tracks personal growth</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-info" role="alert">
+                <p class="mb-0"><strong>How it works:</strong> Our system will analyze the emotional tone of your journal entry and provide personalized recommendations based on your current mood and previous anxiety assessments.</p>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
