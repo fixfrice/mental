@@ -5,17 +5,17 @@ def load_dataset(filename="survey_data.csv"):
     with open(filename, "r") as file:
         reader = file.readlines()
     
-    for row in reader[1:]:  # пропускаем заголовок через [1:]
+    for row in reader[1:]:  # пропустить заголовок
         parts = row.strip().split(",")
         X.append([int(val) for val in parts[:5]])
 
     return X
 
-
 def euclidean_distance(a, b):
     return sum((x - y) ** 2 for x, y in zip(a, b)) ** 0.5
 
 def initialize_centroids(X, k=3):
+    random.seed(42)  # фиксируем выбор
     return random.sample(X, k)
 
 def assign_clusters(X, centroids):
@@ -54,14 +54,19 @@ def predict(input_data):
     X = load_dataset()
     centroids = train_kmeans(X)
 
+    # Оцениваем риск по сумме значений в центроиде
+    centroid_scores = [(i, sum(c)) for i, c in enumerate(centroids)]
+    centroid_scores.sort(key=lambda x: x[1])  # от меньшей суммы к большей
+
+    # Назначаем метки на основе позиции
+    cluster_labels = {
+        centroid_scores[0][0]: "Cluster 0 (Low Risk)",
+        centroid_scores[1][0]: "Cluster 1 (Medium Risk)",
+        centroid_scores[2][0]: "Cluster 2 (High Risk)",
+    }
+
     # Определяем ближайший кластер
     distances = [euclidean_distance(input_data, c) for c in centroids]
     cluster = distances.index(min(distances))
 
-    cluster_labels = {
-        0: "Cluster 0 (Low Risk)",
-        1: "Cluster 1 (Medium Risk)",
-        2: "Cluster 2 (High Risk)"
-    }
-
-    return f"{cluster_labels.get(cluster, 'Unknown')} (cluster {cluster})"
+    return f"{cluster_labels.get(cluster)} (cluster {cluster})"

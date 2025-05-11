@@ -11,8 +11,12 @@ def load_dataset(filename="survey_data.csv"):
         next(reader)
         for row in reader:
             X.append([float(val) for val in row[:5]])
-            y.append(float(row[5]))
+
+            # бинаризация цели:
+            level = int(row[5])
+            y.append(1.0 if level >= 3 else 0.0)
     return X, y
+
 
 # Сигмоида
 def sigmoid(x):
